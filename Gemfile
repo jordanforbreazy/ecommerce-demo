@@ -8,8 +8,6 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'pg'
 gem 'turbolinks', '~> 5'
-gem 'oj'
-gem 'aasm'
 gem 'slim'
 
 group :development, :test do
