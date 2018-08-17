@@ -3,6 +3,7 @@ class Cart < ApplicationRecord
 	before_save(:calc_subtotal_and_qty)
 
 	has_many :line_items
+	belongs_to :customer
 
 	private
 

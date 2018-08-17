@@ -1,4 +1,10 @@
-Customer.create([
+ActiveRecord::Base.connection.execute("TRUNCATE TABLE orders RESTART IDENTITY")
+ActiveRecord::Base.connection.execute("TRUNCATE TABLE customers RESTART IDENTITY")
+ActiveRecord::Base.connection.execute("TRUNCATE TABLE products RESTART IDENTITY")
+ActiveRecord::Base.connection.execute("TRUNCATE TABLE line_items RESTART IDENTITY")
+ActiveRecord::Base.connection.execute("TRUNCATE TABLE carts RESTART IDENTITY")
+ActiveRecord::Base.connection.execute("TRUNCATE TABLE charges RESTART IDENTITY")
+Customer.create!([
 	{ first_name: 'Jordan',
 		last_name: 'Minneti',
 		email: 'jkminneti@gmail.com'
@@ -13,7 +19,7 @@ Customer.create([
 	}
 ])
 
-Product.create([
+Product.create!([
 	{ name: 'Two Whole Ninja',
 		description: 'One more than one ninja',
 		price: 8700,
@@ -36,252 +42,45 @@ Product.create([
 	}
 ])
 
-Cart.create([
-	# DELIVERED status
-	# 1
-	{ subtotal: 0,
-		products_qty: 0,
-		status: 'paid',
-		customer_id: 1
-	},
-	# 2
-	{ subtotal: 0,
-		products_qty: 0,
-		status: 'paid',
-		customer_id: 2
-	},
-	# 3
-	{ subtotal: 0,
-		products_qty: 0,
-		status: 'paid',
-		customer_id: 2
-	},
-	# 4
-	{ subtotal: 0,
-		products_qty: 0,
-		status: 'paid',
-		customer_id: 3
-	},
-	# Paid but not Delivered
-	# 5
-	{ subtotal: 0,
-		products_qty: 0,
-		status: 'paid',
-		customer_id: 3
-	},
-	# 6
-	{ subtotal: 0,
-		products_qty: 0,
-		status: 'paid',
-		customer_id: 3
-	},
-	# 7
-	{ subtotal: 0,
-		products_qty: 0,
-		status: 'paid',
-		customer_id: 1
-	},
-	# DISPUTES
-	# 8
-	{ subtotal: 0,
-		products_qty: 0,
-		status: 'created',
-		customer_id: 3
-	},
-	# 9
-	{ subtotal: 0,
-		products_qty: 0,
-		status: 'created',
-		customer_id: 3
-	},
-	# 10
-	{ subtotal: 0,
-		products_qty: 0,
-		status: 'created',
-		customer_id: 3
-	}
-])
 
-LineItem.create([
-	{ cart_id: 1,
-		product_id: 1,
-		qty: 3
-	},
-	{ cart_id: 1,
-		product_id: 2,
-		qty: 4
-	},
-	{ cart_id: 2,
-		product_id: 3,
-		qty: 1
-	},
-	{ cart_id: 2,
-		product_id: 4,
-		qty: 2
-	},
-	{ cart_id: 3,
-		product_id: 1,
-		qty: 4
-	},
-	{ cart_id: 4,
-		product_id: 2,
-		qty: 3
-	},
-	{ cart_id: 5,
-		product_id: 3,
-		qty: 2
-	},
-	{ cart_id: 6,
-		product_id: 1,
-		qty: 1
-	},
-	{ cart_id: 6,
-		product_id: 2,
-		qty: 4
-	},
-	{ cart_id: 7,
-		product_id: 3,
-		qty: 1
-	},
-	{ cart_id: 8,
-		product_id: 4,
-		qty: 2
-	},
-	{ cart_id: 9,
-		product_id: 3,
-		qty: 1
-	},
-	{ cart_id: 10,
-		product_id: 1,
-		qty: 2
-	}
-])
+[['paid', 1], ['paid', 2], ['paid', 2], ['paid', 3], 
+	['paid', 3], ['paid', 3], ['paid', 1], 
+	['created', 3], ['created', 3], ['created', 3]].each do |data|
+	new_cart = Cart.new({subtotal: 0, products_qty: 0, status: data[0]})
+	new_cart.customer = Customer.find(data[1])
+	new_cart.save!
+end
 
-Order.create([
-	# Delivered
-	{ total: 0,
-		tax: 0,
-		status: 'delivered',
-		customer_id: 1,
-		cart_id: 1
-	},
-	{ total: 0,
-		tax: 0,
-		status: 'delivered',
-		customer_id: 2,
-		cart_id: 2
-	},
-	{ total: 0,
-		tax: 0,
-		status: 'delivered',
-		customer_id: 2,
-		cart_id: 3
-	},
-	{ total: 0,
-		tax: 0,
-		status: 'delivered',
-		customer_id: 3,
-		cart_id: 4
-	},
-	# Not yet delivered
-	{ total: 0,
-		tax: 0,
-		status: 'paid',
-		customer_id: 3,
-		cart_id: 5
-	},
-	{ total: 0,
-		tax: 0,
-		status: 'paid',
-		customer_id: 3,
-		cart_id: 6
-	},
-	{ total: 0,
-		tax: 0,
-		status: 'paid',
-		customer_id: 1,
-		cart_id: 7
-	},
-	# Disputes
-	{ total: 0,
-		tax: 0,
-		status: 'paid',
-		customer_id: 3,
-		cart_id: 8
-	},
-	{ total: 0,
-		tax: 0,
-		status: 'paid',
-		customer_id: 3,
-		cart_id: 9
-	},
-	{ total: 0,
-		tax: 0,
-		status: 'paid',
-		customer_id: 3,
-		cart_id: 10
-	},
-])
+[[3, 1, 1], [4, 1, 2], [2, 2, 3], [1, 2, 4], [2, 3, 1], [3, 4, 2], [5, 5, 3], [2, 6, 1], [1, 6, 2], [3, 7, 3], [4,8,4],[2, 9,3],[1, 10,1]].each do |data|
+	new_line = LineItem.new({qty: data[0]})
+	new_line.cart = Cart.find(data[1])
+	new_line.product = Product.find(data[2])
+	new_line.save!
+end
 
-Charge.create([
-	{ paid: true,
-		amount: 0,
-		refunded: false,
-		order_id: 1,
-		disputed: false
-	},
-	{ paid: true,
-		amount: 0,
-		refunded: false,
-		order_id: 2,
-		disputed: false
-	},
-	{ paid: true,
-		amount: 0,
-		refunded: false,
-		order_id: 3,
-		disputed: false
-	},
-	{ paid: true,
-		amount: 0,
-		refunded: false,
-		order_id: 4,
-		disputed: false
-	},
-	{ paid: true,
-		amount: 0,
-		refunded: false,
-		order_id: 5,
-		disputed: false
-	},
-	{ paid: true,
-		amount: 0,
-		refunded: false,
-		order_id: 6,
-		disputed: false
-	},
-	{ paid: true,
-		amount: 0,
-		refunded: false,
-		order_id: 7,
-		disputed: false
-	},
-	{ paid: true,
-		amount: 0,
-		refunded: true,
-		order_id: 8,
-		disputed: true
-	},
-	{ paid: true,
-		amount: 0,
-		refunded: false,
-		order_id: 9,
-		disputed: true
-	},
-	{ paid: true,
-		amount: 0,
-		refunded: false,
-		order_id: 10,
-		disputed: true
-	}
-])
+[[1, 1], [2, 2], [2, 3], [3, 4]].each do |data|
+	new_order = Order.new({total: 0, tax: 0, status: 'delivered'})
+	new_order.customer = Customer.find(data[0])
+	new_order.cart = Cart.find(data[1])
+	new_order.save!
+end
+
+[[3, 5], [3, 6], [1,7], [3,8], [3,9], [3,10]].each do |data|
+	new_order = Order.new({total: 0, tax: 0, status: 'paid'})
+	new_order.customer = Customer.find(data[0])
+	new_order.cart = Cart.find(data[1])
+	new_order.save!
+end
+
+8.times do |i|
+	next if i == 0
+	new_charge = Charge.create({paid: true, amount: 0, refunded: false, disputed: false})
+	new_charge.order = Order.find(i)
+	new_charge.save!
+end
+
+[8, 9, 10].each do |i|
+	new_charge = Charge.create({paid: true, amount: 0, refunded: false, disputed: true})
+	new_charge.order = Order.find(i)
+	new_charge.save!
+end
