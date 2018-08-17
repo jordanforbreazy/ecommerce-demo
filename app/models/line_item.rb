@@ -8,6 +8,6 @@ class LineItem < ApplicationRecord
 	private
 
 	def save_current_product_price
-		self.update_attribute(:price_per_on_create, self.product.price)
+		self.price_per_on_create = self.product.price
 	end
 end
