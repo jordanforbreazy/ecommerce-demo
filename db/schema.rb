@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_16_235852) do
+ActiveRecord::Schema.define(version: 2018_08_17_014848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,61 @@ ActiveRecord::Schema.define(version: 2018_08_16_235852) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "carts", force: :cascade do |t|
+    t.integer "subtotal"
+    t.string "status"
+    t.integer "products_qty"
+    t.integer "customer_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "charges", force: :cascade do |t|
+    t.boolean "paid"
+    t.integer "amount"
+    t.string "currency"
+    t.boolean "refunded"
+    t.integer "order_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "customers", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "line_items", force: :cascade do |t|
+    t.integer "cart_id"
+    t.integer "product_id"
+    t.integer "qty"
+    t.integer "price_per_on_create"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer "total"
+    t.integer "tax"
+    t.string "status"
+    t.integer "customer_id"
+    t.integer "cart_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.integer "price"
+    t.integer "qty"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
