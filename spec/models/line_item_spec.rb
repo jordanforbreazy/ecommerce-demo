@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe Cart, type: :model do
+RSpec.describe LineItem, type: :model do
 	
-	describe "updates update cart details" do
+	describe "quantity changes update cart if not yet paid" do
 		it "updates cart subtotal and products_qty" do
 			cart = create(:cart, status: "created")
 			cart.customer = create(:customer)
