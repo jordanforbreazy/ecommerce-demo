@@ -1,5 +1,4 @@
 class Order < ApplicationRecord
-	include AASM
 	before_save(:calc_total_and_tax)
 
 	has_many :charges

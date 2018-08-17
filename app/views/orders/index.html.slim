@@ -1,0 +1,31 @@
+h1 Orders
+table border="1"
+  thead
+    tr
+      th Customer
+      th Status
+      th Cart
+      th Breakdown
+  tbody
+    -@orders.each do |order|
+      tr
+        td align="center"
+          p= order.customer.first_name + ' ' + order.customer.last_name
+          p= order.customer.email
+        td= order.status.humanize
+        td
+          -items = order.cart.line_items.size
+          -order.cart.line_items.each_with_index do |item, i|
+            b Item: #{item.product.name}
+            p Description: #{item.product.description}
+            p Cost per: #{number_to_currency(item.price_per_on_create.to_f / 100.0)}
+            p Qty: #{item.qty}
+            -if items > 1 && i + 1 != items
+              hr
+        td align="center"
+          p Subtotal: #{number_to_currency(order.cart.subtotal / 100.0)}
+          p Tax: #{number_to_currency(order.tax/ 100.0)}
+          b Total: #{number_to_currency(order.total/ 100.0)}
+          -if order.charges.where(disputed: true).any?
+            p style="color:red"
+              | DISPUTED

@@ -84,3 +84,5 @@ end
 	new_charge.order = Order.find(i)
 	new_charge.save!
 end
+
+Cart.find_each{|c|c.calc_subtotal_and_qty}
