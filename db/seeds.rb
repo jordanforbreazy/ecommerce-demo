@@ -161,63 +161,63 @@ Order.create([
 	# Delivered
 	{ total: 0,
 		tax: 0,
-		status: 'delivered'
+		status: 'delivered',
 		customer_id: 1,
 		cart_id: 1
 	},
 	{ total: 0,
 		tax: 0,
-		status: 'delivered'
+		status: 'delivered',
 		customer_id: 2,
 		cart_id: 2
 	},
 	{ total: 0,
 		tax: 0,
-		status: 'delivered'
+		status: 'delivered',
 		customer_id: 2,
 		cart_id: 3
 	},
 	{ total: 0,
 		tax: 0,
-		status: 'delivered'
+		status: 'delivered',
 		customer_id: 3,
 		cart_id: 4
 	},
 	# Not yet delivered
 	{ total: 0,
 		tax: 0,
-		status: 'paid'
+		status: 'paid',
 		customer_id: 3,
 		cart_id: 5
 	},
 	{ total: 0,
 		tax: 0,
-		status: 'paid'
+		status: 'paid',
 		customer_id: 3,
 		cart_id: 6
 	},
 	{ total: 0,
 		tax: 0,
-		status: 'paid'
+		status: 'paid',
 		customer_id: 1,
 		cart_id: 7
 	},
 	# Disputes
 	{ total: 0,
 		tax: 0,
-		status: 'paid'
+		status: 'paid',
 		customer_id: 3,
 		cart_id: 8
 	},
 	{ total: 0,
 		tax: 0,
-		status: 'paid'
+		status: 'paid',
 		customer_id: 3,
 		cart_id: 9
 	},
 	{ total: 0,
 		tax: 0,
-		status: 'paid'
+		status: 'paid',
 		customer_id: 3,
 		cart_id: 10
 	},
